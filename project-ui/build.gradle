@@ -1,0 +1,26 @@
+plugins {
+    id 'base'
+    id 'com.github.node-gradle.node' version '7.1.0'
+}
+
+node {
+    download = true
+    version = '20.16.0'
+}
+
+// Minimal, safe default: do not fail if no package.json yet
+tasks.register('frontendBuild') {
+    group = 'build'
+    description = 'Builds the frontend if package.json is present; otherwise, no-op.'
+    doLast {
+        if (file('package.json').exists()) {
+            println 'package.json found. Please configure npm/yarn build and wire it to Gradle later.'
+        } else {
+            println 'No package.json found; skipping frontend build.'
+        }
+    }
+}
+
+tasks.named('build') {
+    dependsOn 'frontendBuild'
+}

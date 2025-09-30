@@ -1,0 +1,27 @@
+plugins {
+    id 'base'
+}
+
+ext {
+    set('springBootVersion', '3.3.3')
+    set('springDependencyManagementVersion', '1.1.6')
+    set('javaVersion', 21)
+    set('nodePluginVersion', '7.1.0')
+    set('nodeVersion', '20.16.0')
+}
+
+allprojects {
+    group = 'com.sentitone'
+    version = '0.1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    // Ensure tests (when present) use JUnit Platform
+    tasks.matching { it.name == 'test' }.configureEach {
+        useJUnitPlatform()
+    }
+}

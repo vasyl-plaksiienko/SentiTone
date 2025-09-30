@@ -1,0 +1,11 @@
+rootProject.name = 'SentiTone'
+
+include(
+    'auth-service',
+    'project-service',
+    'project-worker',
+    'dashboard-ui',
+    'project-ui',
+    'analytics-ui',
+    'express-ui'
+)
