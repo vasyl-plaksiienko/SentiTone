@@ -5,54 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
-    <changeSet id="1-create-users" author="junie">
-        <createTable tableName="users">
-            <column name="username" type="varchar(100)">
-                <constraints primaryKey="true" primaryKeyName="pk_users" nullable="false"/>
-            </column>
-            <column name="password" type="varchar(200)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="enabled" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+    <changeSet id="create security schema" author="test">
+	<preConditions onFail="MARK_RAN">
+		<dbms type="h2" />
+	</preConditions>
+        <sql endDelimiter=";">
+             CREATE SCHEMA security
+        </sql>
     </changeSet>
 
-    <changeSet id="2-create-authorities" author="junie">
-        <createTable tableName="authorities">
-            <column name="username" type="varchar(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="authority" type="varchar(100)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addForeignKeyConstraint baseTableName="authorities"
-                                 baseColumnNames="username"
-                                 referencedTableName="users"
-                                 referencedColumnNames="username"
-                                 constraintName="fk_auth_user"
-                                 onDelete="CASCADE"/>
-        <createIndex tableName="authorities" indexName="idx_auth_username">
-            <column name="username"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="3-seed-admin-user" author="junie">
-        <insert tableName="users">
-            <column name="username" value="admin"/>
-            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZo5i.Ur07XH8VEWil/92pT9bkHYOEqf9Wl16"/>
-            <column name="enabled" valueBoolean="true"/>
-        </insert>
-        <insert tableName="authorities">
-            <column name="username" value="admin"/>
-            <column name="authority" value="ROLE_USER"/>
-        </insert>
-        <insert tableName="authorities">
-            <column name="username" value="admin"/>
-            <column name="authority" value="ROLE_ADMIN"/>
-        </insert>
-    </changeSet>
+    <include file="db/changelog/tables.xml"/>
+    <include file="db/changelog/data.xml"/>
 
 </databaseChangeLog>
