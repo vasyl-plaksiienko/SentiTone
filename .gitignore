@@ -1,0 +1,82 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# Gradle
+.gradle
+**/build/
+!src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.gradletasknamecache
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Database
+*.db
+*.sqlite
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Node modules (if using frontend tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage reports
+*.exec
+.sonar/
+
+# Documentation build
+docs/_build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Docker
+.dockerignore
+
+# Test output
+TEST-*.xml
