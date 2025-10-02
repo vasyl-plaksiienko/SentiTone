@@ -39,4 +39,20 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="3-seed-admin-user" author="junie">
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$N9qo8uLOickgx2ZMRZo5i.Ur07XH8VEWil/92pT9bkHYOEqf9Wl16"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+        <insert tableName="authorities">
+            <column name="username" value="admin"/>
+            <column name="authority" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="authorities">
+            <column name="username" value="admin"/>
+            <column name="authority" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

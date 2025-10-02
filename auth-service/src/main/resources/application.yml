@@ -9,9 +9,8 @@ spring:
     password:
   jooq:
     sql-dialect: h2
-  sql:
-    init:
-      mode: always
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog.xml
   h2:
     console:
       enabled: true
