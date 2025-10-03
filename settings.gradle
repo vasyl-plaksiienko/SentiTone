@@ -7,5 +7,6 @@ include(
     'dashboard-ui',
     'project-ui',
     'analytics-ui',
-    'express-ui'
+    'express-ui',
+    'infrastructure'
 )

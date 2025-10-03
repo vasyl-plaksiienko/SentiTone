@@ -1,0 +1,24 @@
+plugins {
+    id 'com.github.rmee.terraform' version '1.6.0'
+}
+
+terraform {
+    // Download and use this Terraform version
+    terraformVersion = '1.5.7'
+
+    // Root directory with Terraform configuration
+    workingDir = file('terraform')
+
+    // Pass Gradle project properties to Terraform variables
+    // Usage examples:
+    //   gradlew :infrastructure:terraformPlan -PawsRegion=us-east-1 \
+    //           -PeksAzs=["us-east-1a","us-east-1b"] -PdbAzs=["us-east-1a","us-east-1b"]
+    variables = [
+        aws_region: (project.findProperty('awsRegion') ?: 'us-east-1'),
+        eks_availability_zones: project.findProperty('eksAzs'),
+        db_availability_zones: project.findProperty('dbAzs')
+    ]
+
+    // You can also set environment variables for AWS credentials/profile if needed
+    // environment "AWS_PROFILE", (project.findProperty('awsProfile') ?: "default")
+}
