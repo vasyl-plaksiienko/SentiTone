@@ -72,7 +72,7 @@ jooq {
                 records = true
             }
             target {
-                packageName = 'com.sentitone.database.security'
+                packageName = 'com.sentitone.database'
                 directory = "$buildDir/generated-src/jooq/main"
             }
         }
@@ -89,4 +89,8 @@ sourceSets {
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
+}
+
+tasks.named('compileJava').configure {
+    dependsOn(tasks.named('jooqCodegen'))
 }

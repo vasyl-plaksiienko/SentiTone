@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.sentitone.database.security.security.tables.Authorities.AUTHORITIES;
-import static com.sentitone.database.security.security.tables.Users.USERS;
+import static com.sentitone.database.security.tables.Authorities.AUTHORITIES;
+import static com.sentitone.database.security.tables.Users.USERS;
 
 @Service
 public class JooqUserDetailsService implements UserDetailsService {
