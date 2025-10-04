@@ -6,11 +6,11 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
     <changeSet id="create security schema" author="test">
-	<preConditions onFail="MARK_RAN">
-		<dbms type="h2" />
-	</preConditions>
+        <preConditions onFail="MARK_RAN">
+            <dbms type="h2" />
+        </preConditions>
         <sql endDelimiter=";">
-             CREATE SCHEMA security
+            CREATE SCHEMA security
         </sql>
     </changeSet>
 

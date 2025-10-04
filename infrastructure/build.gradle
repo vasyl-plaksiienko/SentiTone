@@ -2,12 +2,13 @@ plugins {
     id 'org.ysb33r.terraform' version '2.4.3'
 }
 
-def awsSecretKeyId = project.properties['secretKeyId']
-def awsSecretAccessKey = project.properties['secretAccessKey']
+def awsSecretKeyId = project.properties.getOrDefault('secretKeyId', '').toString()
+def awsSecretAccessKey = project.properties.getOrDefault('secretAccessKey', '').toString()
 def awsRegion = project.properties.getOrDefault('region', 'eu-west-1').toString()
-def env = project.properties['env']
-def mainBucket = project.properties['mainBucket']
-def dbPassword = project.properties['dbPassword']
+//def env = project.properties['env']
+def env = project.properties.getOrDefault('env', 'dev').toString()
+def mainBucket = project.properties.getOrDefault('mainBucket', '').toString()
+def dbPassword = project.properties.getOrDefault('dbPassword', '').toString()
 
 terraform {
   toolchains {
