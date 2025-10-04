@@ -1,0 +1,48 @@
+Resources:
+  CICDUser:
+    Type: AWS::IAM::User
+    Properties: 
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+#        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+#        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
+#      Policies:
+#        - PolicyName: ECRFullAccess
+#          PolicyDocument:
+#            Statement:
+#              - Effect: Allow
+#                Action:
+#                  - ecr:*
+#                Resource: "*"
+#        - PolicyName: IAMRoleAccess
+#          PolicyDocument:
+#            Statement:
+#              - Effect: Allow
+#                Action:
+#                  - iam:GetRole
+#                  - iam:PassRole
+#                  - iam:CreateRole
+#                  - iam:DeleteRole
+#                  - iam:AttachRolePolicy
+#                  - iam:DetachRolePolicy
+#                  - iam:GetInstanceProfile
+#                  - iam:CreateInstanceProfile
+#                  - iam:DeleteInstanceProfile
+#                  - iam:AddRoleToInstanceProfile
+#                  - iam:RemoveRoleFromInstanceProfile
+#                  - iam:CreateServiceLinkedRole
+#                Resource: "*"
+#        - PolicyName: EC2VPCAccess
+#          PolicyDocument:
+#            Statement:
+#              - Effect: Allow
+#                Action:
+#                  - ec2:DescribeVpcs
+#                  - ec2:DescribeVpcAttribute
+#                Resource: "*"
+      UserName: !Sub ${AWS::AccountId}-sentitone-cicd-user
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::AccountId}-sentitone

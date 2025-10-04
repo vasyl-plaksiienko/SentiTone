@@ -19,20 +19,24 @@ The MVP focuses on providing users with structured analytics and the ability to 
 ## Technical Stack
 The MVP is built on a reliable microservices architecture, ensuring scalability and fault tolerance.
 
-| Component | Technology | Description / Rationale |
-| --------- | ---------- | ----------------------- |
-| Backend (API/Business Logic) | Java 21+ (Spring Boot 3) | Stability, high performance, and a rich ecosystem for business logic and data processing. Using Spring Security for authentication (JWT). |
-| Micro frontend (UI) | React.js | Component-based approach for building two independent yet stylistically consistent frontend applications (Dashboard and Express Analysis). |
-| ML Layer | deeplearning4j or Python Keras | The ML model will be deployed as a separate microservice, allowing for flexible model changes without altering the core backend. |
-| Persistence | PostgreSQL (on AWS EC2 or RDS) | Reliable, scalable, and feature-rich storage for project metadata, users, and analysis results. |
-| Build Tool | Gradle | A unified tool for dependency management and building both Java projects and, where necessary, integrating the React application build processes. |
-| Containerization | Docker | Standardizing the environment for all subprojects. |
-| Deployment environment | AWS EKS | Ensuring high availability, automatic scaling, and efficient management of microservices. |
-| Code & CI/CD | GitHub & GitHub Actions | GitHub for code repository, version control, and collaboration. GitHub Actions for automated build, test, and deployment (CI/CD) pipelines. |
+| Component                    | Technology | Description / Rationale                                                                                                                                                 |
+|------------------------------| ------ |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Backend (API/Business Logic) | Java 21+ (Spring Boot 3) | Stability, high performance, and a rich ecosystem for business logic and data processing. Using Spring Security for authentication (JWT).                               |
+| Micro frontend (UI)          | React.js | Component-based approach for building two independent yet stylistically consistent frontend applications (Dashboard and Express Analysis).                              |
+| ML Layer                     | deeplearning4j or Python Keras | The ML model will be deployed as a separate microservice, allowing for flexible model changes without altering the core backend.                                        |
+| Persistence                  | PostgreSQL (AWS RDS) | Reliable, scalable, and feature-rich storage for project metadata, users, and analysis results.                                                                         |
+| Build Tool                   | Gradle | A unified tool for dependency management and building both Java projects and, where necessary, integrating the React application build processes.                       |
+| Infrastructure               | AWS, Terraform | All infrastructure objects (Database, k8s) cluster are in AWS cloud. The infrastructure should be created by Terraform according to infrastructure as a code principles |
+| Containerization             | Docker | Standardizing the environment for all subprojects.                                                                                                                      |
+| Deployment environment       | AWS EKS | Ensuring high availability, automatic scaling, and efficient management of microservices.                                                                               |
+| Code                         | GitHub | GitHub for code repository, version control, and collaboration. |
 
 ## Subproject Breakdown
 The architecture follows microservices principles with a focus on Separation of Concerns (SoC).
 The MVP will be divided into the following independent, buildable modules (Gradle Modules):
+
+**infrastructure**
+- contains Terraform scripts which create the RDS database and EKS cluster
 
 ### Backend Microservices (Java/Spring Boot)
 **auth-service**

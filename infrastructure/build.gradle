@@ -2,11 +2,46 @@ plugins {
     id 'org.ysb33r.terraform' version '2.4.3'
 }
 
-// NOTE: Minimal configuration to ensure the infrastructure project builds successfully with Gradle 8.
-// The org.ysb33r.terraform plugin provides terraform* tasks. We keep defaults to avoid
-// incompatible properties. You can still run tasks like:
-//   gradlew :infrastructure:terraformInit
-//   gradlew :infrastructure:terraformPlan
-// and supply variables via standard Terraform mechanisms (tfvars, environment variables, etc.).
+def awsSecretKeyId = project.properties['secretKeyId']
+def awsSecretAccessKey = project.properties['secretAccessKey']
+def awsRegion = project.properties.getOrDefault('region', 'eu-west-1').toString()
+def env = project.properties['env']
+def mainBucket = project.properties['mainBucket']
+def dbPassword = project.properties['dbPassword']
+
 terraform {
+  toolchains {
+    standard {
+      executableByVersion('1.13.3') 
+    }
+  }
+
+  secrets {
+    aws(org.ysb33r.gradle.iac.base.secrets.AwsSecrets) {
+      useAccessKeyId(awsSecretKeyId)
+      useSecretAccessKey(awsSecretAccessKey)
+    }
+  }
+
+  backends {
+    s3(org.ysb33r.gradle.terraform.backends.S3Backend) {
+      s3BucketName = mainBucket
+      region = awsRegion
+      stateNamePrefix = "${env}/state/infrastructure"
+      fromSecretsProvider(terraform.secrets.aws.secretVariables)
+    }
+  }
+
+  sourceSets {
+    main {
+      srcDir = 'terraform'
+      variables {
+        var 'environment_name', env
+        var 'aws_region', awsRegion
+        var 'main_bucket', mainBucket
+        var 'db_password', dbPassword
+      }
+      useBackend('s3')
+    }
+  }
 }

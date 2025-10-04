@@ -1,13 +1,18 @@
-variable "aws_region" { type = string }
-variable "tags" { type = map(string), default = {} }
-
+variable "identifier" { type = string }
 variable "name" { type = string }
 variable "username" { type = string }
-variable "password" { type = string, sensitive = true }
+variable "password" {
+  type = string
+  sensitive = true
+}
 variable "instance_class" { type = string }
-variable "engine" { type = string, default = "postgres" }
-variable "engine_version" { type = string, default = "16" }
-variable "allocated_storage_gb" { type = number, default = 20 }
-variable "subnet_ids" { type = list(string), default = [] }
+variable "engine" { type = string }
+variable "engine_version" { type = string }
+variable "allocated_storage_gb" { type = number }
+variable "port" { type = number }
 variable "vpc_id" { type = string }
-variable "vpc_security_group_ids" { type = list(string), default = [] }
+variable "availability_zone" { type = string }
+variable "accessible_public" { type = bool }
+variable "accessible_from" { type = list(string) }
+variable "subnet_ids" { type = list(string) }
+variable "tags" { type = map(string) }
