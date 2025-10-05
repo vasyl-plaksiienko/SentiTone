@@ -7,8 +7,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: ${databaseUser}
     password: ${databasePassword}
-  jooq:
-    sql-dialect: postgres
+#  jooq:
+#    sql-dialect: postgres
   liquibase:
     change-log: classpath:db/changelog/db.changelog.xml
     default-schema: security

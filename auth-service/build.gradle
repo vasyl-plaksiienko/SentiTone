@@ -2,7 +2,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.3'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'java'
-    id 'org.jooq.jooq-codegen-gradle' version '3.19.10'
+//    id 'org.jooq.jooq-codegen-gradle' version '3.19.10'
 }
 
 java {
@@ -18,22 +18,22 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+//    implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'org.liquibase:liquibase-core:4.29.2'
     implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.3.1'
 
     runtimeOnly 'org.postgresql:postgresql:42.7.8'
 
     // jOOQ codegen dependencies for Liquibase-based generation
-    jooqCodegen 'org.jooq:jooq-meta-extensions-liquibase:3.19.10'
-    jooqCodegen 'org.liquibase:liquibase-core:4.29.2'
-    jooqCodegen files('src/main/resources')
+//    jooqCodegen 'org.jooq:jooq-meta-extensions-liquibase:3.19.10'
+//    jooqCodegen 'org.liquibase:liquibase-core:4.29.2'
+//    jooqCodegen files('src/main/resources')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-jooq {
+/*jooq {
     configuration {
         logging = 'WARN'
         generator {
@@ -80,10 +80,10 @@ sourceSets {
     }
 }
 
-tasks.withType(Test).configureEach {
-    useJUnitPlatform()
-}
-
 tasks.named('compileJava').configure {
     dependsOn(tasks.named('jooqCodegen'))
+}*/
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
 }

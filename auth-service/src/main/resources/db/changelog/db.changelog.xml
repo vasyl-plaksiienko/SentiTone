@@ -14,7 +14,7 @@
         </sql>
     </changeSet>
 
-    <include file="db/changelog/tables.xml"/>
-    <include file="db/changelog/data.xml"/>
+    <include file="/db/changelog/user_tables.xml"/>
+    <include file="/db/changelog/user_data.xml"/>
 
 </databaseChangeLog>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="1-create-users" author="junie">
+        <createTable tableName="users" schemaName="security">
+            <column name="username" type="varchar(50)">
+                <constraints primaryKey="true" primaryKeyName="pk_users" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2-create-authorities" author="junie">
+        <createTable tableName="authorities" schemaName="security">
+            <column name="username" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="authorities"
+				 baseTableSchemaName="security"
+                                 baseColumnNames="username"
+                                 referencedTableName="users"
+                                 referencedTableSchemaName="security"
+                                 referencedColumnNames="username"
+                                 constraintName="fk_auth_user"
+                                 onDelete="CASCADE"/>
+        <createIndex tableName="authorities" schemaName="security" indexName="idx_auth_username">
+            <column name="username"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="3-create-groups" author="vpla">
+        <createTable tableName="groups" schemaName="security">
+            <column name="id" type="bigint" autoIncrement="true" defaultOnNull="true">
+                <constraints primaryKey="true" primaryKeyName="pk_groups" nullable="false"/>
+            </column>
+            <column name="group_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="authorities"
+                                 baseTableSchemaName="security"
+                                 baseColumnNames="username"
+                                 referencedTableName="users"
+                                 referencedTableSchemaName="security"
+                                 referencedColumnNames="username"
+                                 constraintName="fk_auth_user"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="4-create-group_authorities" author="vpla">
+        <createTable tableName="group_authorities" schemaName="security">
+            <column name="group_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="group_authorities"
+                                 baseTableSchemaName="security"
+                                 baseColumnNames="group_id"
+                                 referencedTableName="groups"
+                                 referencedTableSchemaName="security"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_group_auth_group"
+                                 onDelete="CASCADE"/>
+        <createIndex tableName="group_authorities" schemaName="security" indexName="idx_group_auth_group_id">
+            <column name="group_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="5-create-group_members" author="vpla">
+        <createTable tableName="group_members" schemaName="security">
+            <column name="id" type="bigint" autoIncrement="true" defaultOnNull="true">
+                <constraints primaryKey="true" primaryKeyName="pk_group_members" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="group_members"
+                                 baseTableSchemaName="security"
+                                 baseColumnNames="group_id"
+                                 referencedTableName="groups"
+                                 referencedTableSchemaName="security"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_group_members_group"
+                                 onDelete="CASCADE"/>
+        <createIndex tableName="group_authorities" schemaName="security" indexName="idx_group_members_group_id">
+            <column name="group_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
