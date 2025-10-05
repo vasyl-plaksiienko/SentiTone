@@ -27,7 +27,6 @@ dependencies {
     // jOOQ codegen dependencies for Liquibase-based generation
     jooqCodegen 'org.jooq:jooq-meta-extensions-liquibase:3.19.10'
     jooqCodegen 'org.liquibase:liquibase-core:4.29.2'
-    jooqCodegen 'com.h2database:h2:2.2.224'
     jooqCodegen files('src/main/resources')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -37,12 +36,6 @@ dependencies {
 jooq {
     configuration {
         logging = 'WARN'
-        jdbc {
-            driver = 'org.h2.Driver'
-            url = 'jdbc:h2:mem:jooqcodegen;DB_CLOSE_DELAY=-1;MODE=PostgreSQL'
-            user = 'sa'
-            password = ''
-        }
         generator {
             name = 'org.jooq.codegen.DefaultGenerator'
             database {
@@ -68,8 +61,8 @@ jooq {
             }
             generate {
                 pojos = true
-                daos = false
-                records = true
+                daos = true
+                records = false
             }
             target {
                 packageName = 'com.sentitone.database'

@@ -1,4 +1,4 @@
-package com.sentitone.authservice.security;
+package com.sentitone.authservice.service;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import static com.sentitone.database.security.tables.Authorities.AUTHORITIES;
 import static com.sentitone.database.security.tables.Users.USERS;
 
-@Service
 public class JooqUserDetailsService implements UserDetailsService {
 
     private final DSLContext dsl;

@@ -1,4 +1,4 @@
-package com.sentitone.authservice.config;
+package com.sentitone.authservice;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -38,7 +38,7 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
-public class AuthorizationServerConfig {
+public class SecurityConfig {
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -75,6 +75,7 @@ public class AuthorizationServerConfig {
                 .scope("api.read")
                 .build();
         return new InMemoryRegisteredClientRepository(registeredClient);
+        // JdbcRegisteredClientRepository
     }
 
     @Bean
