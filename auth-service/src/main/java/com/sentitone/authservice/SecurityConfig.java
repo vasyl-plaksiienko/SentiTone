@@ -6,8 +6,10 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,14 +24,16 @@ import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2Au
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -62,20 +66,33 @@ public class SecurityConfig {
     }
 
     @Bean
-    RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
-        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("sentitone-client")
-                .clientSecret(passwordEncoder.encode("secret"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/sentitone-client-oidc")
-                .scope(OidcScopes.OPENID)
-                .scope("api.read")
-                .build();
-        return new InMemoryRegisteredClientRepository(registeredClient);
-        // JdbcRegisteredClientRepository
+    @Profile("!test")
+    public JdbcUserDetailsManager userDetailsService(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
+    }
+
+    @Bean
+    @Profile("!test")
+    RegisteredClientRepository registeredClientRepository(JdbcOperations jdbcOperations, PasswordEncoder passwordEncoder) {
+        JdbcRegisteredClientRepository repository = new JdbcRegisteredClientRepository(jdbcOperations);
+        // Ensure a default client exists for local/dev use
+        String clientId = "sentitone-client";
+        RegisteredClient existing = repository.findByClientId(clientId);
+        if (existing == null) {
+            RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                    .clientId(clientId)
+                    .clientSecret(passwordEncoder.encode("secret"))
+                    .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                    .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                    .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                    .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                    .redirectUri("http://127.0.0.1:8080/login/oauth2/code/sentitone-client-oidc")
+                    .scope(OidcScopes.OPENID)
+                    .scope("api.read")
+                    .build();
+            repository.save(registeredClient);
+        }
+        return repository;
     }
 
     @Bean
@@ -101,15 +118,15 @@ public class SecurityConfig {
     }
 
     @Bean
+    JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    }
+
+    @Bean
     JWKSource<SecurityContext> jwkSource() {
         RSAKey rsaKey = generateRsa();
         JWKSet jwkSet = new JWKSet(rsaKey);
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
-    }
-
-    @Bean
-    JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 
     private static RSAKey generateRsa() {

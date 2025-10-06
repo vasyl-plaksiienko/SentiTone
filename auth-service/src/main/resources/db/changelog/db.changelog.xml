@@ -16,5 +16,6 @@
 
     <include file="/db/changelog/user_tables.xml"/>
     <include file="/db/changelog/user_data.xml"/>
+    <include file="/db/changelog/registered_client_tables.xml"/>
 
 </databaseChangeLog>
